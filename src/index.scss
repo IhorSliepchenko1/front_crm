@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$desktop-small: 1200px;
+$tablet: 992px;
+$tablet-small: 768px;
+$mobile: 576px;
+$mobile-sm: 320px;
+
+@mixin desktop-small {
+     @media (max-width: $desktop-small) {
+          @content;
+     }
+}
+
+@mixin tablet-small {
+     @media (max-width: $tablet-small) {
+          @content;
+     }
+}
+
+@mixin tablet {
+     @media (max-width: $tablet) {
+          @content;
+     }
+}
+
+@mixin mobile {
+     @media (max-width: $mobile) {
+          @content;
+     }
+}
+
+@mixin mobile-sm {
+     @media (max-width: $mobile-sm) {
+          @content;
+     }
+}
+
+header {
+     min-width: 100%;
+     margin-inline: auto;
+}
+
+main {
+     min-height: 100vh;
+
+     &.h-screen {
+          height: auto !important;
+     }
+
+}
+
+td,
+th {
+     max-width: 100px !important;
+     text-align: center !important;
+
+     @include tablet {
+          font-size: 13px !important;
+     }
+
+     @include mobile {
+          font-size: 8px !important;
+     }
+}
+
+.ant-modal-footer {
+     display: flex;
+     flex-direction: row-reverse;
+     justify-content: space-between;
+     padding-top: 30px !important;
+}
+
+.img-big-container {
+     height: 100%;
+}
+
+.button-add {
+     @include tablet {
+          font-size: 15px !important;
+     }
+
+     @include mobile {
+          font-size: 8px !important;
+     }
+}
+
+.cash-register-card {
+     margin-top: 8px;
+     margin-bottom: 8px;
+}
+
+.logout {
+     @include tablet {
+          font-size: 11px;
+     }
+}
+
+
+.type-container {
+     max-width: 1700px;
+     margin: 0 auto;
+}
+
+.active {
+     color: hsl(145.96000000000004 79.46% 43.92%);
+}
+
+.container-table {
+     max-width: 1700px;
+     margin: 0 auto;
+}
+
+* {
+     @include mobile {
+          font-size: 8px !important;
+     }
+}
