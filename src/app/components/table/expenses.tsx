@@ -12,6 +12,8 @@ import { ModalDelete } from "../modals/delete";
 import { useDeleteExpensesMutation, useLazyGetAllExpensesQuery } from "../../services/expensesApi";
 import { useLazyGetBalanceQuery } from "../../services/apiBalance";
 import { useCheckValidToken } from "../../hooks/useCheckValidToken";
+import { useCreateContext } from "../../../theme-provider";
+import { AlertSuccess } from "../alert/alert-success";
 
 type Props = {
      data: { rows: Expenses[], count: number } | null | undefined
@@ -29,6 +31,7 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
 
      const { calendarDate } = useCalendarInputDate()
      const { decoded } = useCheckValidToken()
+     const { alertStatus, alert, classFrames } = useCreateContext()
 
      const [dataOpenImage, setDataOpenImage] = useState({ path: '', name: '' })
      const [isModalOpen, setIsModalOpen] = useState(false);
@@ -55,6 +58,8 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
           await deleteExpenses(id).unwrap()
           await triggerGetAllExpenses({ page, limit }).unwrap()
           await triggerGetAllBalance().unwrap()
+
+          alertStatus()
      }
 
      const showModal = () => {
@@ -185,6 +190,12 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
                               typeName={dataUpdate.typeName}
                               update={true}
                          />}
+
+               {alert && <AlertSuccess
+                    type="error"
+                    message={`Расход удалён`}
+                    classFrames={classFrames}
+               />}
           </>
      )
 }

@@ -6,6 +6,7 @@ import { Deposit } from "../types";
 import { useCalendarInputDate } from "../hooks/useCalendarInputDate";
 import { ModalCashRegisterBase } from "./modals/cash-register";
 import { useLazyGetBalanceQuery } from "../services/apiBalance";
+import { useCreateContext } from "../../theme-provider";
 
 type Props = {
      isOpen: boolean
@@ -17,6 +18,7 @@ type Props = {
 export const CashRegisterDeposit = ({ isOpen, onOpenChange, page, limit }: Props) => {
      const { calendarDate } = useCalendarInputDate()
      const [error, setError] = useState("")
+     const { alertStatus } = useCreateContext()
 
      const {
           handleSubmit,
@@ -49,6 +51,7 @@ export const CashRegisterDeposit = ({ isOpen, onOpenChange, page, limit }: Props
                await triggerGetAllCashRegisterDeposit({ page, limit }).unwrap()
                await triggerGetAllBalance().unwrap()
                resetInput()
+               alertStatus()
 
           } catch (err) {
                if (hasErrorField(err)) {
@@ -56,8 +59,8 @@ export const CashRegisterDeposit = ({ isOpen, onOpenChange, page, limit }: Props
                }
           }
      }
-     return (
 
+     return (
           <ModalCashRegisterBase
                title={`Внести кассу`}
                isOpen={isOpen}

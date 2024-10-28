@@ -10,6 +10,8 @@ import { useCalendarInputDate } from "../../hooks/useCalendarInputDate";
 import { ModalDelete } from "../modals/delete";
 import { useLazyGetBalanceQuery } from "../../services/apiBalance";
 import { useCheckValidToken } from "../../hooks/useCheckValidToken";
+import { useCreateContext } from "../../../theme-provider";
+import { AlertSuccess } from "../alert/alert-success";
 
 type Props = {
      data: { rows: CashData[], count: number } | null | undefined
@@ -37,6 +39,7 @@ export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Pro
      const [triggerGetAllBalance] = useLazyGetBalanceQuery()
      const { decoded } = useCheckValidToken()
 
+     const { alertStatus, alert, classFrames } = useCreateContext()
 
      const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -50,6 +53,8 @@ export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Pro
           await deleteCashRegister(id).unwrap()
           await triggerGetAllCashRegisterDeposit({ page, limit }).unwrap()
           await triggerGetAllBalance().unwrap()
+
+          alertStatus()
 
      }
 
@@ -155,6 +160,12 @@ export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Pro
                     dateProps={dataUpdate.dateProps}
                     id={dataUpdate.id}
                />
+
+               {alert && <AlertSuccess
+                    type="error"
+                    message={`Касса удалена`}
+                    classFrames={classFrames}
+               />}
           </>
 
      )

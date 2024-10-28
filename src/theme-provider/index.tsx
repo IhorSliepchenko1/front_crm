@@ -1,20 +1,28 @@
 import React, { useState, createContext, useContext } from "react"
 
-type ThemeContaxtType = {
+type ContextType = {
      theme: `dark` | `light`
      toggleTheme: () => void
+     alertStatus: () => void
+     alert: boolean
+     classFrames: string
 }
 
-export const ThemeContext = createContext<ThemeContaxtType>({
+export const CreateContext = createContext<ContextType>({
      theme: `light`,
      toggleTheme: () => null,
+     alert: false,
+     alertStatus: () => null,
+     classFrames: `fade-out`
 })
 
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+export const ComponentProvider = ({ children }: { children: React.ReactNode }) => {
      const storedTheme = localStorage.getItem(`theme`)
      const currentTheme = storedTheme ? (storedTheme as `dark` | `light`) : `light`
 
      const [theme, setTheme] = useState(currentTheme)
+     const [alert, setAlert] = useState(false)
+     const [classFrames, setClassFrames] = useState(`fade-out`);
 
      const toggleTheme = () => {
           setTheme((prevTheme) => {
@@ -24,13 +32,27 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
           })
      }
 
+     const alertStatus = () => {
+          setAlert(true);
+          setClassFrames(`fade-in`)
+          setTimeout(() => {
+               setClassFrames(`fade-out`)
+
+               setTimeout(() => {
+                    setAlert(false);
+               }, 500);
+
+          }, 700);
+     };
+
+
      return (
-          <ThemeContext.Provider value={{ theme, toggleTheme }}>
+          <CreateContext.Provider value={{ theme, toggleTheme, alertStatus, alert, classFrames }}>
                <main className={`${theme} text-foreground bg-background h-screen`}>
                     {children}
                </main>
-          </ThemeContext.Provider>
+          </CreateContext.Provider>
      )
 }
 
-export const useTheme = () => useContext(ThemeContext)
+export const useCreateContext = () => useContext(CreateContext)

@@ -6,6 +6,7 @@ import { useGetAllTypeQuery } from "../services/typeApi";
 import { ModalExpensesBase } from "./modals/expenses";
 import { useLazyGetBalanceQuery } from "../services/apiBalance";
 import { useExpensesDepositMutation, useLazyGetAllExpensesQuery } from "../services/expensesApi";
+import { useCreateContext } from "../../theme-provider";
 
 type Props = {
      isOpen: boolean
@@ -30,6 +31,8 @@ export const ExpensesDeposit = ({ isOpen, onOpenChange, page, limit }: Props) =>
      const [expensesDeposit] = useExpensesDepositMutation()
      const { data } = useGetAllTypeQuery()
      const [triggerGetAllBalance] = useLazyGetBalanceQuery()
+
+     const { alertStatus } = useCreateContext()
 
      const types = useMemo(() => {
           return data ? data : []
@@ -74,6 +77,7 @@ export const ExpensesDeposit = ({ isOpen, onOpenChange, page, limit }: Props) =>
                await triggerGetAllExpenses({ page, limit }).unwrap();
                await triggerGetAllBalance().unwrap()
                resetInput()
+               alertStatus()
 
           } catch (err) {
 

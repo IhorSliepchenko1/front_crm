@@ -9,6 +9,8 @@ import { ErrorMessage } from "./error-message";
 import { hasErrorField } from "../../utils/has-error-field";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { useCheckValidToken } from "../hooks/useCheckValidToken";
+import { useCreateContext } from "../../theme-provider";
+import { AlertSuccess } from "./alert/alert-success";
 
 type Props = {
      name: string
@@ -39,7 +41,8 @@ export const TypeExpensesForm = ({ name, id }: Props) => {
      const [updateType] = useUpdateTypeMutation()
      const [deleteType] = useDeleteTypeMutation()
      const { decoded } = useCheckValidToken()
-
+     const [alertDelete, setAlertDelete] = useState(false)
+     const { alertStatus, alert, classFrames } = useCreateContext()
 
      const updateTypeRegister = async (data: NameUpdate) => {
           try {
@@ -57,12 +60,15 @@ export const TypeExpensesForm = ({ name, id }: Props) => {
 
      const deleteTypeRegister = async () => {
           try {
+               console.log(alertDelete);
+
+               setAlertDelete(false)
                await deleteType(id).unwrap()
                await triggerGetAllTypeRegister().unwrap()
-
+               alertStatus()
+               setAlertDelete(true)
 
           } catch (err) {
-
                if (hasErrorField(err)) {
                     setError(err.data.message)
                }
@@ -73,10 +79,7 @@ export const TypeExpensesForm = ({ name, id }: Props) => {
      return (
 
           <>
-
-
                <form className="flex items-center justify-between py-1.5 gap-2" onSubmit={handleSubmit(updateTypeRegister)}>
-
                     <Input control={control}
                          name="name"
                          label="Тип расхода"
@@ -107,5 +110,11 @@ export const TypeExpensesForm = ({ name, id }: Props) => {
                     <ErrorMessage error={error} />
                </div>
 
+               {alert &&
+                    <AlertSuccess
+                         type="error"
+                         message={`Тип расхода удалена`}
+                         classFrames={classFrames}
+                    />}
           </>)
 }

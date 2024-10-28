@@ -9,6 +9,8 @@ import { useLazyGetAllUsersQuery, useRegisterMutation } from "../services/userAp
 import { Input as NextInput } from "@nextui-org/react";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { useCreateContext } from "../../theme-provider";
+import { AlertSuccess } from "./alert/alert-success";
 
 type User = {
      login: string,
@@ -22,6 +24,7 @@ export const UserRegistration = () => {
      const [isVisible, setIsVisible] = useState(false);
 
      const toggleVisibility = () => setIsVisible(!isVisible);
+     const { alertStatus, alert, classFrames } = useCreateContext()
 
      const [error, setError] = useState("")
      const {
@@ -44,7 +47,7 @@ export const UserRegistration = () => {
                await registration(data).unwrap()
                await triggerGetUser().unwrap()
                reset()
-
+               alertStatus()
           } catch (err) {
                if (hasErrorField(err)) {
                     setError(err.data.message)
@@ -53,57 +56,66 @@ export const UserRegistration = () => {
      }
 
      return (
-          <form className="flex flex-col gap-4 py-3" onSubmit={handleSubmit(onSubmit)}>
-               <Input control={control}
-                    name="login"
-                    label="Логин"
-                    type="text"
-                    required="Обязательное поле" />
+          <>
+               <form className="flex flex-col gap-4 py-3" onSubmit={handleSubmit(onSubmit)}>
+                    <Input control={control}
+                         name="login"
+                         label="Логин"
+                         type="text"
+                         required="Обязательное поле" />
 
 
-               <Controller
-                    name="password"
-                    control={control}
-                    render={({ field }) => (
-                         <NextInput
-                              {...field}
-                              name="password"
-                              label="Пароль"
-                              endContent={
-                                   <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
-                                        {isVisible ? (
-                                             <FaEye className="text-2xl text-default-400 pointer-events-none" />
-                                        ) : (
-                                             <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
-                                        )}
-                                   </button>
-                              }
-                              type={isVisible ? "text" : "password"}
+                    <Controller
+                         name="password"
+                         control={control}
+                         render={({ field }) => (
+                              <NextInput
+                                   {...field}
+                                   name="password"
+                                   label="Пароль"
+                                   endContent={
+                                        <button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+                                             {isVisible ? (
+                                                  <FaEye className="text-2xl text-default-400 pointer-events-none" />
+                                             ) : (
+                                                  <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
+                                             )}
+                                        </button>
+                                   }
+                                   type={isVisible ? "text" : "password"}
 
-                         />
-                    )}
-               />
-               <Controller
-                    name="role"
-                    control={control}
-                    render={({ field }) => (
-                         <RadioGroup
-                              label="Роль пользователя"
-                              color="secondary"
-                              {...field}
-                         >
-                              <Radio value="ADMIN">ADMIN</Radio>
-                              <Radio value="USER">USER</Radio>
-                         </RadioGroup>
-                    )}
-               />
+                              />
+                         )}
+                    />
+                    <Controller
+                         name="role"
+                         control={control}
+                         render={({ field }) => (
+                              <RadioGroup
+                                   label="Роль пользователя"
+                                   color="secondary"
+                                   {...field}
+                              >
+                                   <Radio value="ADMIN">ADMIN</Radio>
+                                   <Radio value="USER">USER</Radio>
+                              </RadioGroup>
+                         )}
+                    />
 
 
-               <ErrorMessage error={error} />
-               <Button color="secondary" variant="solid" type="submit">
-                    Зарегистрировать
-               </Button>
+                    <ErrorMessage error={error} />
+                    <Button color="secondary" variant="solid" type="submit">
+                         Добавить пользователя
+                    </Button>
+               </form>
 
-          </form>
+               {alert && <AlertSuccess
+                    type="success"
+                    message={`Пользователь добавлен`}
+                    classFrames={classFrames}
+               />}
+          </>
+
+
      )
 }

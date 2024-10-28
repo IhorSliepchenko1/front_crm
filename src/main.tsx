@@ -6,7 +6,7 @@ import { store } from './app/store'
 import { AuthGuard } from './features/authGuard'
 import { NextUIProvider } from '@nextui-org/react'
 import { Layout } from './app/components/layout/layout'
-import { ThemeProvider } from './theme-provider'
+import { ComponentProvider } from './theme-provider'
 import { CashRegister } from './pages/cash-register'
 import { TypeExpenses } from './pages/type-expenses'
 import { Expenses } from './pages/expenses'
@@ -52,11 +52,11 @@ if (container) {
   root.render(
     <Provider store={store}>
       <NextUIProvider>
-        <ThemeProvider>
+        <ComponentProvider>
           <AuthGuard>
             <RouterProvider router={router} />
           </AuthGuard>
-        </ThemeProvider>
+        </ComponentProvider>
       </NextUIProvider>
     </Provider>,
   )

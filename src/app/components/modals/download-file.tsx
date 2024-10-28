@@ -1,5 +1,5 @@
 import { Modal, ModalContent, ModalFooter } from "@nextui-org/react"
-import { useTheme } from "../../../theme-provider"
+import { useCreateContext } from "../../../theme-provider"
 import { BASE_URL } from "../../../constants"
 import { Button } from "../buttons/button"
 import { useDownloadImage } from "../../hooks/useDownloadImage"
@@ -14,7 +14,7 @@ type Props = {
 }
 
 export const ModalDownloadFile = ({ dataOpenImage, isOpen, onOpenChange }: Props) => {
-     const { theme } = useTheme()
+     const { theme } = useCreateContext()
      const { downloadFile } = useDownloadImage()
 
      return (

@@ -1,6 +1,6 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
-import { useTheme } from "../../../theme-provider";
+import { useCreateContext } from "../../../theme-provider";
 import { Input } from "../input";
 import { ErrorMessage } from "../error-message";
 import { Control, SubmitHandler, UseFormHandleSubmit } from "react-hook-form";
@@ -45,7 +45,7 @@ export const ModalExpensesBase = ({
      update = false,
      typeName,
 }: Props) => {
-     const { theme } = useTheme()
+     const { theme } = useCreateContext()
      const [newUpdate, setNewUpdate] = useState(update)
 
      const toggleUpdate = () => {

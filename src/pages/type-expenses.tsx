@@ -7,6 +7,8 @@ import { useCreateTypeMutation, useGetAllTypeQuery, useLazyGetAllTypeQuery } fro
 import { hasErrorField } from "../utils/has-error-field";
 import { useState } from "react";
 import { ErrorMessage } from "../app/components/error-message";
+import { useCreateContext } from "../theme-provider";
+import { AlertSuccess } from "../app/components/alert/alert-success";
 
 type NameType = {
      name: string
@@ -28,13 +30,17 @@ export const TypeExpenses = () => {
      const { data } = useGetAllTypeQuery()
      const [triggerGetAllTypeRegister] = useLazyGetAllTypeQuery()
      const [addType] = useCreateTypeMutation()
-
+     const [alertSuccess, setAlertSuccess] = useState(false)
+     const { alertStatus, alert, classFrames } = useCreateContext()
 
      const addtypeExpenses = async (data: NameType) => {
           try {
+               setAlertSuccess(false)
                await addType(data).unwrap()
                await triggerGetAllTypeRegister().unwrap()
                reset()
+               alertStatus()
+               setAlertSuccess(true)
 
           } catch (err) {
 
@@ -69,6 +75,12 @@ export const TypeExpenses = () => {
                          ))
                     }
                </div>}
+
+               {alert && alertSuccess && <AlertSuccess
+                    type="success"
+                    message={`Тип расхода добавлен`}
+                    classFrames={classFrames}
+               />}
           </div>
      )
 }

@@ -1,10 +1,10 @@
 import { FaRegMoon } from "react-icons/fa"
 import { LuSunMedium } from "react-icons/lu"
-import { useTheme } from "../../../theme-provider"
+import { useCreateContext } from "../../../theme-provider"
 import { VisuallyHidden, useSwitch } from "@nextui-org/react";
 
 export const ToggleTheme = () => {
-     const { theme, toggleTheme } = useTheme()
+     const { theme, toggleTheme } = useCreateContext()
 
      const {
           Component,

@@ -2,7 +2,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextu
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../buttons/button";
 import { Input } from "../input";
-import { useTheme } from "../../../theme-provider";
+import { useCreateContext } from "../../../theme-provider";
 import { ErrorMessage } from "../error-message";
 import { useEffect, useState } from "react";
 import { hasErrorField } from "../../../utils/has-error-field";
@@ -47,7 +47,7 @@ export const UpdateUser = ({
           },
      })
 
-     const { theme } = useTheme()
+     const { theme } = useCreateContext()
      const [updateUser] = useUpdateUserMutation()
      const [triggerGetUserById] = useLazyGetAllUsersQuery()
      const [error, setError] = useState("")

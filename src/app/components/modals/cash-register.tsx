@@ -1,7 +1,7 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
 import { Input } from "../input";
 import { Button } from "../buttons/button";
-import { useTheme } from "../../../theme-provider";
+import { useCreateContext } from "../../../theme-provider";
 import { ErrorMessage } from "../error-message";
 import { Control, UseFormHandleSubmit } from "react-hook-form";
 import { Deposit } from "../../types";
@@ -17,7 +17,7 @@ type Props = {
 }
 
 export const ModalCashRegisterBase = ({ isOpen, resetInput, control, handleSubmit, onSubmit, error, title }: Props) => {
-     const { theme } = useTheme()
+     const { theme } = useCreateContext()
 
 
      return (
