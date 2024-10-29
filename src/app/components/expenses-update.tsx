@@ -8,7 +8,7 @@ import { useLazyGetBalanceQuery } from "../services/apiBalance";
 
 type Expenses = {
      name: string;
-     sum: number;
+     sum: number | null;
      date: string;
 }
 
@@ -18,7 +18,7 @@ type Props = {
      page: number
      limit: number
      name: string
-     sum: number
+     sum: number | null
      date: string
      id: number
      typeName: string
