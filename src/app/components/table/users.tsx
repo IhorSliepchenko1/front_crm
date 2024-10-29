@@ -9,7 +9,7 @@ import { UpdateUser } from "../modals/update-user";
 import { useCheckValidToken } from "../../hooks/useCheckValidToken";
 import { useAppDispatch } from "../../hooks";
 import { logout } from "../../../features/user/userSlice";
-import { useCreateContext } from "../../../theme-provider";
+import { useCreateContext } from "../../../context-provider";
 import { AlertSuccess } from "../alert/alert-success";
 
 export const Users = () => {
@@ -26,8 +26,7 @@ export const Users = () => {
     id: 0,
   })
   const dispatch = useAppDispatch()
-  const { alertStatus, alert, classFrames } = useCreateContext()
-  const [alertDelete, setAlertDelete] = useState(false)
+  const { alertStatus, alert, classFrames, typeAlert } = useCreateContext()
 
   const renderData = useMemo(() => {
     if (data) {
@@ -42,11 +41,9 @@ export const Users = () => {
   const loadingState = isLoading || data?.length === 0 ? "loading" : "idle";
 
   const deleteHandler = async (id: number) => {
-    setAlertDelete(false)
     await deleteUser(id).unwrap()
     await triggerGetAllUsers().unwrap()
-    setAlertDelete(true)
-    alertStatus()
+    alertStatus(`delete`)
 
     if (decoded.id === id) {
       dispatch(logout())
@@ -129,7 +126,7 @@ export const Users = () => {
         id={userData.id}
       />
 
-      {alert && alertDelete &&
+      {alert && typeAlert === `delete` &&
         <AlertSuccess
           type="error"
           message={`Пользователь удалён`}

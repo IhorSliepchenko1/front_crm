@@ -47,7 +47,7 @@ export type Expenses = {
 
 
 export type CashData = {
-     cash: number, cashless: number, date: string | Date, id?: number
+     cash: number, cashless: number, date: string | Date, id?: number, totalCash: number
 }
 
 

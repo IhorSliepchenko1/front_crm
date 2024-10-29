@@ -7,7 +7,7 @@ import { useGetAllExpensesQuery } from "../app/services/expensesApi";
 import { ExpensesDeposit } from "../app/components/expenses-deposit";
 import { useDisclosure } from "@nextui-org/react";
 import { Balance } from "../app/components/balance";
-import { useCreateContext } from "../theme-provider";
+import { useCreateContext } from "../context-provider";
 import { AlertSuccess } from "../app/components/alert/alert-success";
 
 export const Expenses = () => {

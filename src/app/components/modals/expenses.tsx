@@ -1,6 +1,6 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
 import { Select, SelectItem } from "@nextui-org/react";
-import { useCreateContext } from "../../../theme-provider";
+import { useCreateContext } from "../../../context-provider";
 import { Input } from "../input";
 import { ErrorMessage } from "../error-message";
 import { Control, SubmitHandler, UseFormHandleSubmit } from "react-hook-form";
@@ -13,7 +13,7 @@ import { Button } from "../buttons/button";
 
 type Expenses = {
      name: string;
-     sum: number;
+     sum: number | null;
      date: string;
 }
 
@@ -79,7 +79,9 @@ export const ModalExpensesBase = ({
                                         name="sum"
                                         label="Сумма расхода"
                                         type="number"
-                                        required="Обязательное поле" />
+                                        required="Обязательное поле"
+                                        placeholder="0"
+                                   />
                                    <Input control={control}
                                         name="date"
                                         label="Дата"

@@ -9,7 +9,7 @@ import { ErrorMessage } from "./error-message";
 import { hasErrorField } from "../../utils/has-error-field";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { useCheckValidToken } from "../hooks/useCheckValidToken";
-import { useCreateContext } from "../../theme-provider";
+import { useCreateContext } from "../../context-provider";
 import { AlertSuccess } from "./alert/alert-success";
 
 type Props = {
@@ -42,7 +42,7 @@ export const TypeExpensesForm = ({ name, id }: Props) => {
      const [deleteType] = useDeleteTypeMutation()
      const { decoded } = useCheckValidToken()
      const [alertDelete, setAlertDelete] = useState(false)
-     const { alertStatus, alert, classFrames } = useCreateContext()
+     const { alertStatus, alert, classFrames, typeAlert } = useCreateContext()
 
      const updateTypeRegister = async (data: NameUpdate) => {
           try {
@@ -65,7 +65,7 @@ export const TypeExpensesForm = ({ name, id }: Props) => {
                setAlertDelete(false)
                await deleteType(id).unwrap()
                await triggerGetAllTypeRegister().unwrap()
-               alertStatus()
+               alertStatus(`delete`)
                setAlertDelete(true)
 
           } catch (err) {
@@ -111,6 +111,7 @@ export const TypeExpensesForm = ({ name, id }: Props) => {
                </div>
 
                {alert &&
+                    typeAlert === `delete` &&
                     <AlertSuccess
                          type="error"
                          message={`Тип расхода удалена`}

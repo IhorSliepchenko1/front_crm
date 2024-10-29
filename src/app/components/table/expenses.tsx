@@ -12,7 +12,7 @@ import { ModalDelete } from "../modals/delete";
 import { useDeleteExpensesMutation, useLazyGetAllExpensesQuery } from "../../services/expensesApi";
 import { useLazyGetBalanceQuery } from "../../services/apiBalance";
 import { useCheckValidToken } from "../../hooks/useCheckValidToken";
-import { useCreateContext } from "../../../theme-provider";
+import { useCreateContext } from "../../../context-provider";
 import { AlertSuccess } from "../alert/alert-success";
 
 type Props = {
@@ -31,7 +31,7 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
 
      const { calendarDate } = useCalendarInputDate()
      const { decoded } = useCheckValidToken()
-     const { alertStatus, alert, classFrames } = useCreateContext()
+     const { alertStatus, alert, classFrames, typeAlert } = useCreateContext()
 
      const [dataOpenImage, setDataOpenImage] = useState({ path: '', name: '' })
      const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,7 +59,7 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
           await triggerGetAllExpenses({ page, limit }).unwrap()
           await triggerGetAllBalance().unwrap()
 
-          alertStatus()
+          alertStatus(`delete`)
      }
 
      const showModal = () => {
@@ -191,9 +191,15 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
                               update={true}
                          />}
 
-               {alert && <AlertSuccess
+               {alert && typeAlert === `delete` && <AlertSuccess
                     type="error"
                     message={`Расход удалён`}
+                    classFrames={classFrames}
+               />}
+
+               {alert && typeAlert === `add` && <AlertSuccess
+                    type="success"
+                    message={`Расход добавлен`}
                     classFrames={classFrames}
                />}
           </>

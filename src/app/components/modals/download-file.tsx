@@ -1,5 +1,5 @@
 import { Modal, ModalContent, ModalFooter } from "@nextui-org/react"
-import { useCreateContext } from "../../../theme-provider"
+import { useCreateContext } from "../../../context-provider"
 import { BASE_URL } from "../../../constants"
 import { Button } from "../buttons/button"
 import { useDownloadImage } from "../../hooks/useDownloadImage"

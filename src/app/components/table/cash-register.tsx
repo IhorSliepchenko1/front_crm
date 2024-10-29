@@ -10,8 +10,9 @@ import { useCalendarInputDate } from "../../hooks/useCalendarInputDate";
 import { ModalDelete } from "../modals/delete";
 import { useLazyGetBalanceQuery } from "../../services/apiBalance";
 import { useCheckValidToken } from "../../hooks/useCheckValidToken";
-import { useCreateContext } from "../../../theme-provider";
+import { useCreateContext } from "../../../context-provider";
 import { AlertSuccess } from "../alert/alert-success";
+import { useFormattedNumber } from "../../hooks/useFormattedNumber";
 
 type Props = {
      data: { rows: CashData[], count: number } | null | undefined
@@ -26,10 +27,16 @@ export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Pro
      const [idCash, setIdCash] = useState(0)
      const [deleteDay, setDeleteDay] = useState(``)
      const { calendarDate } = useCalendarInputDate()
+     const { formattedNumber } = useFormattedNumber()
 
-     const [dataUpdate, setDataUpdate] = useState({
-          cash: 0,
-          cashless: 0,
+     const [dataUpdate, setDataUpdate] = useState<{
+          cash: null | number;
+          cashless: null | number;
+          dateProps: string;
+          id: number;
+     }>({
+          cash: null,
+          cashless: null,
           dateProps: calendarDate(new Date(Date.now())),
           id: 0
      })
@@ -39,7 +46,7 @@ export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Pro
      const [triggerGetAllBalance] = useLazyGetBalanceQuery()
      const { decoded } = useCheckValidToken()
 
-     const { alertStatus, alert, classFrames } = useCreateContext()
+     const { alertStatus, alert, classFrames, typeAlert } = useCreateContext()
 
      const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -54,7 +61,7 @@ export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Pro
           await triggerGetAllCashRegisterDeposit({ page, limit }).unwrap()
           await triggerGetAllBalance().unwrap()
 
-          alertStatus()
+          alertStatus(`delete`)
 
      }
 
@@ -70,6 +77,7 @@ export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Pro
      const handleCancel = () => {
           setIsModalOpen(false);
      };
+
 
      return (
 
@@ -108,37 +116,50 @@ export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Pro
                               {(item) => (
                                    <TableRow key={item?.id}>
                                         {(columnKey) => <TableCell>
-                                             {columnKey === `edit-delete`
-                                                  ? <div className="flex gap-3 justify-center">
-                                                       {decoded.role === `ADMIN` &&
-                                                            <button className="cursor-pointer" onClick={() => {
-                                                                 setIdCash(item?.id ?? 0)
-                                                                 showModal()
-                                                                 setDeleteDay(formatToClientDate(item.date))
-                                                            }}>
-                                                                 <MdDelete />
-                                                            </button>
-                                                       }
-                                                       <button className="cursor-pointer" onClick={() => {
-                                                            setDataUpdate((prev) => (
-                                                                 {
-                                                                      ...prev,
-                                                                      cash: +item.cash,
-                                                                      cashless: +item.cashless,
-                                                                      dateProps: calendarDate(item.date),
-                                                                      id: item.id ?? 0
-                                                                 }))
-                                                            onOpen()
-                                                       }}>
-                                                            <MdModeEditOutline />
-                                                       </button>
-                                                  </div>
-                                                  : columnKey === `date`
-                                                       ? formatToClientDate(item.date)
-                                                       : getKeyValue(item, columnKey)
+
+                                             {
+                                                  columnKey === `date`
+                                                       ? formatToClientDate(item.date) :
+
+                                                       columnKey === `cash` ? formattedNumber(+item.cash) :
+
+                                                            columnKey === `totalCash` ? formattedNumber(+item.totalCash) :
+
+                                                                 columnKey === `cashless` ? formattedNumber(+item.cashless) :
+
+                                                                      columnKey === `edit-delete`
+                                                                           ?
+                                                                           <div className="flex gap-3 justify-center">
+                                                                                {decoded.role === `ADMIN` &&
+                                                                                     <button className="cursor-pointer" onClick={() => {
+                                                                                          setIdCash(item?.id ?? 0)
+                                                                                          showModal()
+                                                                                          setDeleteDay(formatToClientDate(item.date))
+                                                                                     }}>
+                                                                                          <MdDelete />
+                                                                                     </button>
+                                                                                }
+                                                                                <button className="cursor-pointer" onClick={() => {
+                                                                                     setDataUpdate((prev) => (
+                                                                                          {
+                                                                                               ...prev,
+                                                                                               cash: +item.cash,
+                                                                                               cashless: +item.cashless,
+                                                                                               dateProps: calendarDate(item.date),
+                                                                                               id: item.id ?? 0
+                                                                                          }))
+                                                                                     onOpen()
+                                                                                }}>
+                                                                                     <MdModeEditOutline />
+                                                                                </button>
+                                                                           </div>
+                                                                           : getKeyValue(item, columnKey)
                                              }</TableCell>}
                                    </TableRow>
                               )}
+
+
+
                          </TableBody>
                     </TableNext>
                }
@@ -161,7 +182,7 @@ export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Pro
                     id={dataUpdate.id}
                />
 
-               {alert && <AlertSuccess
+               {alert && typeAlert === `delete` && <AlertSuccess
                     type="error"
                     message={`Касса удалена`}
                     classFrames={classFrames}

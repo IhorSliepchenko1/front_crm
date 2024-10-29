@@ -9,7 +9,7 @@ import { useLazyGetAllUsersQuery, useRegisterMutation } from "../services/userAp
 import { Input as NextInput } from "@nextui-org/react";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { useCreateContext } from "../../theme-provider";
+import { useCreateContext } from "../../context-provider";
 import { AlertSuccess } from "./alert/alert-success";
 
 type User = {
@@ -24,7 +24,7 @@ export const UserRegistration = () => {
      const [isVisible, setIsVisible] = useState(false);
 
      const toggleVisibility = () => setIsVisible(!isVisible);
-     const { alertStatus, alert, classFrames } = useCreateContext()
+     const { alertStatus, alert, classFrames, typeAlert } = useCreateContext()
 
      const [error, setError] = useState("")
      const {
@@ -47,7 +47,7 @@ export const UserRegistration = () => {
                await registration(data).unwrap()
                await triggerGetUser().unwrap()
                reset()
-               alertStatus()
+               alertStatus(`add`)
           } catch (err) {
                if (hasErrorField(err)) {
                     setError(err.data.message)
@@ -68,6 +68,9 @@ export const UserRegistration = () => {
                     <Controller
                          name="password"
                          control={control}
+                         rules={{
+                              required: true,
+                         }}
                          render={({ field }) => (
                               <NextInput
                                    {...field}
@@ -109,7 +112,7 @@ export const UserRegistration = () => {
                     </Button>
                </form>
 
-               {alert && <AlertSuccess
+               {alert && typeAlert === `add` && <AlertSuccess
                     type="success"
                     message={`Пользователь добавлен`}
                     classFrames={classFrames}

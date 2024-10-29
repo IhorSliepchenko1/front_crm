@@ -38,6 +38,14 @@ $mobile-sm: 320px;
      }
 }
 
+* {
+     font-family: "Fira Sans", sans-serif;
+
+     @include mobile {
+          font-size: 8px !important;
+     }
+}
+
 header {
      min-width: 100%;
      margin-inline: auto;
@@ -110,10 +118,4 @@ th {
 .container-table {
      max-width: 1700px;
      margin: 0 auto;
-}
-
-* {
-     @include mobile {
-          font-size: 8px !important;
-     }
 }

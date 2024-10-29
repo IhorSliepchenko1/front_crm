@@ -3,9 +3,10 @@ import React, { useState, createContext, useContext } from "react"
 type ContextType = {
      theme: `dark` | `light`
      toggleTheme: () => void
-     alertStatus: () => void
+     alertStatus: (type: `delete` | `add` | ``) => void
      alert: boolean
      classFrames: string
+     typeAlert: `delete` | `add` | ``
 }
 
 export const CreateContext = createContext<ContextType>({
@@ -13,7 +14,8 @@ export const CreateContext = createContext<ContextType>({
      toggleTheme: () => null,
      alert: false,
      alertStatus: () => null,
-     classFrames: `fade-out`
+     classFrames: `fade-out`,
+     typeAlert: ``
 })
 
 export const ComponentProvider = ({ children }: { children: React.ReactNode }) => {
@@ -23,6 +25,7 @@ export const ComponentProvider = ({ children }: { children: React.ReactNode }) =
      const [theme, setTheme] = useState(currentTheme)
      const [alert, setAlert] = useState(false)
      const [classFrames, setClassFrames] = useState(`fade-out`);
+     const [typeAlert, setTypeAlert] = useState<`delete` | `add` | ``>('')
 
      const toggleTheme = () => {
           setTheme((prevTheme) => {
@@ -32,22 +35,24 @@ export const ComponentProvider = ({ children }: { children: React.ReactNode }) =
           })
      }
 
-     const alertStatus = () => {
+     const alertStatus = (type: `delete` | `add` | ``) => {
           setAlert(true);
           setClassFrames(`fade-in`)
+          setTypeAlert(type)
           setTimeout(() => {
                setClassFrames(`fade-out`)
-
                setTimeout(() => {
                     setAlert(false);
+                    setTypeAlert('')
                }, 500);
 
           }, 700);
+
      };
 
 
      return (
-          <CreateContext.Provider value={{ theme, toggleTheme, alertStatus, alert, classFrames }}>
+          <CreateContext.Provider value={{ theme, toggleTheme, alertStatus, alert, classFrames, typeAlert }}>
                <main className={`${theme} text-foreground bg-background h-screen`}>
                     {children}
                </main>

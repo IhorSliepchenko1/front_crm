@@ -1,7 +1,7 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
 import { Input } from "../input";
 import { Button } from "../buttons/button";
-import { useCreateContext } from "../../../theme-provider";
+import { useCreateContext } from "../../../context-provider";
 import { ErrorMessage } from "../error-message";
 import { Control, UseFormHandleSubmit } from "react-hook-form";
 import { Deposit } from "../../types";
@@ -37,12 +37,16 @@ export const ModalCashRegisterBase = ({ isOpen, resetInput, control, handleSubmi
                                         name="cash"
                                         label="Наличные"
                                         type="number"
-                                        required="Обязательное поле" />
+                                        required="Обязательное поле"
+                                        placeholder="0"
+                                   />
                                    <Input control={control}
                                         name="cashless"
                                         label="Безналичные"
                                         type="number"
-                                        required="Обязательное поле" />
+                                        required="Обязательное поле"
+                                        placeholder="0"
+                                   />
                                    <Input control={control}
                                         name="date"
                                         label="Дата"

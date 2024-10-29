@@ -2,7 +2,7 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextu
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../buttons/button";
 import { Input } from "../input";
-import { useCreateContext } from "../../../theme-provider";
+import { useCreateContext } from "../../../context-provider";
 import { ErrorMessage } from "../error-message";
 import { useEffect, useState } from "react";
 import { hasErrorField } from "../../../utils/has-error-field";
@@ -11,6 +11,8 @@ import { RadioGroup, Radio } from "@nextui-org/react";
 import { useCheckValidToken } from "../../hooks/useCheckValidToken";
 import { useAppDispatch } from "../../hooks";
 import { logout } from "../../../features/user/userSlice";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 type Props = {
      isOpen: boolean
@@ -21,10 +23,12 @@ type Props = {
 }
 
 type User = {
-     login: string,
-     password: string,
-     role: string,
+     login: string;
+     newPassword: string;
+     oldPassword: string;
+     role: string;
 }
+
 
 export const UpdateUser = ({
      isOpen,
@@ -42,7 +46,8 @@ export const UpdateUser = ({
           reValidateMode: "onBlur",
           defaultValues: {
                login,
-               password: '',
+               newPassword: '',
+               oldPassword: '',
                role,
           },
      })
@@ -72,7 +77,7 @@ export const UpdateUser = ({
                await updateUser({ data, id }).unwrap()
                await triggerGetUserById().unwrap()
 
-               if (decoded.login === data.login && data.password !== undefined) {
+               if (decoded.login) {
                     dispatch(logout())
                }
 
@@ -84,6 +89,9 @@ export const UpdateUser = ({
                }
           }
      }
+
+     const [isVisible, setIsVisible] = useState(false);
+     const toggleVisibility = () => setIsVisible(!isVisible);
 
      return (
           <>
@@ -105,11 +113,32 @@ export const UpdateUser = ({
                                                   type="text"
                                                   required="Обязательное поле" />
 
-                                             <Input control={control}
-                                                  name="password"
-                                                  label="Новый пароль"
-                                                  type="text"
-                                             />
+
+                                             <Input
+                                                  control={control}
+                                                  name="oldPassword"
+                                                  endContent={<button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+                                                       {isVisible ? (
+                                                            <FaEye className="text-2xl text-default-400 pointer-events-none" />
+                                                       ) : (
+                                                            <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
+                                                       )}
+                                                  </button>}
+                                                  type={isVisible ? "text" : "password"}
+                                                  label={"Старый пароль"} />
+
+                                             <Input
+                                                  control={control}
+                                                  name="newPassword"
+                                                  endContent={<button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
+                                                       {isVisible ? (
+                                                            <FaEye className="text-2xl text-default-400 pointer-events-none" />
+                                                       ) : (
+                                                            <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
+                                                       )}
+                                                  </button>}
+                                                  type={isVisible ? "text" : "password"}
+                                                  label={"Новый пароль"} />
 
                                              <Controller
                                                   name="role"

@@ -11,8 +11,8 @@ type Props = {
      onOpenChange: () => void
      page: number
      limit: number
-     cash: number | undefined;
-     cashless: number | undefined;
+     cash: number | null;
+     cashless: number | null;
      dateProps: string | Date;
      id: number
 }

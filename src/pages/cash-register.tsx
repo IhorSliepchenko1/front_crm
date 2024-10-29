@@ -8,7 +8,7 @@ import { Button } from "../app/components/buttons/button";
 import { useDisclosure } from "@nextui-org/react";
 import { CashRegisterDeposit } from "../app/components/cash-register-deposit";
 import { Balance } from "../app/components/balance";
-import { useCreateContext } from "../theme-provider";
+import { useCreateContext } from "../context-provider";
 import { AlertSuccess } from "../app/components/alert/alert-success";
 
 export const CashRegister = () => {
@@ -16,7 +16,7 @@ export const CashRegister = () => {
      const [limit] = useState<number>(20)
      const { data, isLoading } = useGetAllCashRegisterQuery({ page, limit })
      const { isOpen, onOpen, onOpenChange } = useDisclosure();
-     const { alert, classFrames } = useCreateContext()
+     const { alert, classFrames, typeAlert } = useCreateContext()
 
      return (
 
@@ -31,7 +31,7 @@ export const CashRegister = () => {
                >Внести кассу</Button>
                <Balance />
 
-               {alert && <AlertSuccess
+               {alert && typeAlert === `add` && < AlertSuccess
                     type="success"
                     message={`Касса внесена`}
                     classFrames={classFrames}

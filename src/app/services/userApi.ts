@@ -45,7 +45,8 @@ export const userApi = api.injectEndpoints({
           updateUser: builder.mutation<User, {
                data: {
                     login: string
-                    password: string
+                    newPassword: string
+                    oldPassword: string
                     role: string
                }; id: number
           }>({

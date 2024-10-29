@@ -6,7 +6,7 @@ import { useGetAllTypeQuery } from "../services/typeApi";
 import { ModalExpensesBase } from "./modals/expenses";
 import { useLazyGetBalanceQuery } from "../services/apiBalance";
 import { useExpensesDepositMutation, useLazyGetAllExpensesQuery } from "../services/expensesApi";
-import { useCreateContext } from "../../theme-provider";
+import { useCreateContext } from "../../context-provider";
 
 type Props = {
      isOpen: boolean
@@ -17,7 +17,7 @@ type Props = {
 
 type Expenses = {
      name: string;
-     sum: number;
+     sum: number | null;
      date: string;
 }
 
@@ -43,12 +43,12 @@ export const ExpensesDeposit = ({ isOpen, onOpenChange, page, limit }: Props) =>
           handleSubmit,
           control,
           reset
-     } = useForm({
+     } = useForm<Expenses>({
           mode: "onChange",
           reValidateMode: "onBlur",
           defaultValues: {
                name: '',
-               sum: 0,
+               sum: null,
                date: calendarDate(new Date(Date.now())),
           },
      })
@@ -77,7 +77,7 @@ export const ExpensesDeposit = ({ isOpen, onOpenChange, page, limit }: Props) =>
                await triggerGetAllExpenses({ page, limit }).unwrap();
                await triggerGetAllBalance().unwrap()
                resetInput()
-               alertStatus()
+               alertStatus(`add`)
 
           } catch (err) {
 

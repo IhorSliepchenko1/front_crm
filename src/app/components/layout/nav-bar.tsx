@@ -5,6 +5,7 @@ import { CiLogout } from "react-icons/ci"
 import { logout, selectIsAuthenticated } from "../../../features/user/userSlice";
 import { NavButton } from "../buttons/nav-button";
 import { ToggleTheme } from "../buttons/toggle-them";
+import { useCheckValidToken } from "../../hooks/useCheckValidToken";
 
 
 export const NavBar = () => {
@@ -13,37 +14,36 @@ export const NavBar = () => {
      const dispatch = useDispatch()
      const navigate = useNavigate()
 
+     const { decoded } = useCheckValidToken()
+
      const handleLogout = () => {
           dispatch(logout())
           navigate(`/auth`)
      }
 
+     const navData = [
+          { title: `Касса`, to: `/`, active: `active` },
+          { title: `Расходы`, to: `/expenses`, active: `` },
+          { title: `Типы расходов`, to: `/type-expenses`, active: `` },
+          { title: `Пользователи`, to: `/registration`, active: `` },
+     ]
+
      return (
 
           <Navbar >
                <NavbarContent >
-                    <NavbarItem>
-                         <NavButton to="/" active={`active`}>
-                              Касса
-                         </NavButton>
-                    </NavbarItem>
-                    <NavbarItem >
-                         <NavButton to="/expenses" >
-                              Расходы
-                         </NavButton>
-                    </NavbarItem>
-                    <NavbarItem>
-                         <NavButton to="/type-expenses">
-                              Типы расходов
-                         </NavButton>
-                    </NavbarItem>
-                    <NavbarItem>
-                         <NavButton to="/registration">
-                              Пользователи
-                         </NavButton>
-                    </NavbarItem>
+                    {
+                         navData.map((item) => (
+                              <NavbarItem key={item.title}>
+                                   <NavButton to={item.to} active={item.active}>
+                                        {item.title}
+                                   </NavButton>
+                              </NavbarItem>
+                         ))
+                    }
                </NavbarContent>
                <NavbarContent justify="end">
+                    <p>{decoded.login}</p>
                     <NavbarItem>
                          <NavbarContent>
                               <ToggleTheme />

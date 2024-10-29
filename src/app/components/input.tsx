@@ -21,7 +21,8 @@ export const Input = ({
      control,
      required = ``,
      color = `default`,
-     disabled = false
+     disabled = false,
+     endContent
 }: Props) => {
      const {
           field,
@@ -50,6 +51,7 @@ export const Input = ({
                errorMessage={`${errors[name]?.message ?? ``}`}
                color={color}
                disabled={disabled}
+               endContent={endContent}
           />
      )
 }

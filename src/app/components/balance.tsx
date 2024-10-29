@@ -1,29 +1,37 @@
+import { useFormattedNumber } from "../hooks/useFormattedNumber";
 import { useGetBalanceQuery } from "../services/apiBalance";
 import { Card, CardBody, Divider, Chip } from "@nextui-org/react";
 
+type DataRender = {
+     title: string;
+     color: "primary" | "default" | "danger" | "success" | "secondary" | "warning" | undefined
+     data: number | undefined;
+}
+
+
 export const Balance = () => {
      const { data } = useGetBalanceQuery()
+     const { formattedNumber } = useFormattedNumber()
 
+     const dataRender: DataRender[] = [
+          { title: `Сумма касс`, color: `primary`, data: data?.totalCash },
+          { title: `Расходы`, color: `danger`, data: data?.totalExpenses },
+          { title: `Баланс`, color: `success`, data: data?.balance },
+     ]
 
      return (
           <div className="cash-register-card">
                <Card >
                     <CardBody>
-                         <div className="p-2 flex justify-between gap-4">
-                              <span>Сумма касс:</span>
-                              <Chip color="primary">{data?.totalCash.toFixed(2)} грн.</Chip>
-                         </div>
-                         <Divider />
-                         <div className="p-2 flex justify-between gap-4">
-                              <span>Расходы:</span>
-                              <Chip color="danger">{data?.totalExpenses.toFixed(2)} грн.</Chip>
-                         </div>
-                         <Divider />
-                         <div className="p-2 flex justify-between gap-4">
-                              <span>Баланс:</span>
-                              <Chip color="success">{data?.balance.toFixed(2)} грн.</Chip>
-                         </div>
-                         <Divider />
+                         {dataRender.map((item, index) => (
+                              <>
+                                   <div key={index} className="p-2 flex justify-between gap-4">
+                                        <p>{item.title}</p>
+                                        <Chip color={item.color}>{formattedNumber(Number(item.data))} грн.</Chip>
+                                   </div>
+                                   <Divider />
+                              </>
+                         ))}
                     </CardBody>
                </Card>
           </div>
