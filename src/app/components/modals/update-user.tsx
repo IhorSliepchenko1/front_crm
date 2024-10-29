@@ -11,8 +11,7 @@ import { RadioGroup, Radio } from "@nextui-org/react";
 import { useCheckValidToken } from "../../hooks/useCheckValidToken";
 import { useAppDispatch } from "../../hooks";
 import { logout } from "../../../features/user/userSlice";
-import { FaEye } from "react-icons/fa";
-import { FaEyeSlash } from "react-icons/fa";
+import { ChangeTypeButton } from "../buttons/change-type-button";
 
 type Props = {
      isOpen: boolean
@@ -59,6 +58,9 @@ export const UpdateUser = ({
      const dispatch = useAppDispatch()
      const { decoded } = useCheckValidToken()
 
+     const [isVisibleOldPass, setIsVisibleOldPass] = useState(false);
+     const [isVisibleNewPass, setIsVisibleNewPass] = useState(false);
+
      const resetInput = () => {
           onOpenChange()
           reset()
@@ -90,8 +92,6 @@ export const UpdateUser = ({
           }
      }
 
-     const [isVisible, setIsVisible] = useState(false);
-     const toggleVisibility = () => setIsVisible(!isVisible);
 
      return (
           <>
@@ -117,27 +117,25 @@ export const UpdateUser = ({
                                              <Input
                                                   control={control}
                                                   name="oldPassword"
-                                                  endContent={<button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
-                                                       {isVisible ? (
-                                                            <FaEye className="text-2xl text-default-400 pointer-events-none" />
-                                                       ) : (
-                                                            <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
-                                                       )}
-                                                  </button>}
-                                                  type={isVisible ? "text" : "password"}
+                                                  endContent={
+                                                       <ChangeTypeButton
+                                                            isVisible={isVisibleOldPass}
+                                                            setIsVisible={setIsVisibleOldPass}
+                                                       />
+                                                  }
+                                                  type={isVisibleOldPass ? "text" : "password"}
                                                   label={"Старый пароль"} />
 
                                              <Input
                                                   control={control}
                                                   name="newPassword"
-                                                  endContent={<button className="focus:outline-none" type="button" onClick={toggleVisibility} aria-label="toggle password visibility">
-                                                       {isVisible ? (
-                                                            <FaEye className="text-2xl text-default-400 pointer-events-none" />
-                                                       ) : (
-                                                            <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
-                                                       )}
-                                                  </button>}
-                                                  type={isVisible ? "text" : "password"}
+                                                  endContent={
+                                                       <ChangeTypeButton
+                                                            isVisible={isVisibleNewPass}
+                                                            setIsVisible={setIsVisibleNewPass}
+                                                       />
+                                                  }
+                                                  type={isVisibleNewPass ? "text" : "password"}
                                                   label={"Новый пароль"} />
 
                                              <Controller

@@ -13,7 +13,7 @@ import { Button } from "../buttons/button";
 
 type Expenses = {
      name: string;
-     sum: number | null;
+     sum: number;
      date: string;
 }
 
