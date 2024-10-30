@@ -3,6 +3,8 @@ FROM node:20 AS build
 
 WORKDIR /usr/src/app
 
+ENV NODE_OPTIONS=--max-old-space-size=8192
+
 COPY package*.json ./
 
 RUN npm install

@@ -24,13 +24,13 @@ export const Balance = () => {
                <Card >
                     <CardBody>
                          {dataRender.map((item, index) => (
-                              <>
-                                   <div key={index} className="p-2 flex justify-between gap-4">
+                              <div key={index}>
+                                   <div className="p-2 flex justify-between gap-4">
                                         <p>{item.title}</p>
                                         <Chip color={item.color}>{formattedNumber(Number(item.data))} грн.</Chip>
                                    </div>
                                    <Divider />
-                              </>
+                              </div>
                          ))}
                     </CardBody>
                </Card>

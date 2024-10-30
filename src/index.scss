@@ -41,9 +41,9 @@ $mobile-sm: 320px;
 * {
      font-family: "Fira Sans", sans-serif;
 
-     @include mobile {
-          font-size: 8px !important;
-     }
+     // @include mobile {
+     //      font-size: 8px !important;
+     // }
 }
 
 header {
@@ -69,7 +69,7 @@ th {
      }
 
      @include mobile {
-          font-size: 8px !important;
+          font-size: 11px !important;
      }
 }
 
@@ -87,10 +87,6 @@ th {
 .button-add {
      @include tablet {
           font-size: 15px !important;
-     }
-
-     @include mobile {
-          font-size: 8px !important;
      }
 }
 
@@ -118,4 +114,11 @@ th {
 .container-table {
      max-width: 1700px;
      margin: 0 auto;
+}
+
+.modal {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
 }

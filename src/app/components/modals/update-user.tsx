@@ -8,9 +8,6 @@ import { useEffect, useState } from "react";
 import { hasErrorField } from "../../../utils/has-error-field";
 import { useLazyGetAllUsersQuery, useUpdateUserMutation } from "../../services/userApi";
 import { RadioGroup, Radio } from "@nextui-org/react";
-import { useCheckValidToken } from "../../hooks/useCheckValidToken";
-import { useAppDispatch } from "../../hooks";
-import { logout } from "../../../features/user/userSlice";
 import { ChangeTypeButton } from "../buttons/change-type-button";
 
 type Props = {
@@ -55,8 +52,6 @@ export const UpdateUser = ({
      const [updateUser] = useUpdateUserMutation()
      const [triggerGetUserById] = useLazyGetAllUsersQuery()
      const [error, setError] = useState("")
-     const dispatch = useAppDispatch()
-     const { decoded } = useCheckValidToken()
 
      const [isVisibleOldPass, setIsVisibleOldPass] = useState(false);
      const [isVisibleNewPass, setIsVisibleNewPass] = useState(false);
@@ -78,11 +73,6 @@ export const UpdateUser = ({
           try {
                await updateUser({ data, id }).unwrap()
                await triggerGetUserById().unwrap()
-
-               if (decoded.login) {
-                    dispatch(logout())
-               }
-
                resetInput()
 
           } catch (err) {
@@ -99,7 +89,7 @@ export const UpdateUser = ({
                     isOpen={isOpen}
                     onOpenChange={resetInput}
                     placement="top-center"
-                    className={`${theme} text-foreground-500`}
+                    className={`${theme} text-foreground-500 modal`}
                >
                     <ModalContent>
                          {(onClose) => (

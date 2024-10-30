@@ -13,7 +13,7 @@ import { Button } from "../buttons/button";
 
 type Expenses = {
      name: string;
-     sum: number | null;
+     sum: number;
      date: string;
 }
 
@@ -61,7 +61,7 @@ export const ModalExpensesBase = ({
                isOpen={isOpen}
                onOpenChange={resetInput}
                placement="top-center"
-               className={`${theme} text-foreground-500`}
+               className={`${theme} text-foreground-500 modal`}
           >
                <ModalContent>
                     {(onClose) => (

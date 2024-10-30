@@ -17,7 +17,7 @@ type Props = {
 
 type Expenses = {
      name: string;
-     sum: number | null;
+     sum: number;
      date: string;
 }
 
@@ -48,7 +48,7 @@ export const ExpensesDeposit = ({ isOpen, onOpenChange, page, limit }: Props) =>
           reValidateMode: "onBlur",
           defaultValues: {
                name: '',
-               sum: null,
+               // sum: 0,
                date: calendarDate(new Date(Date.now())),
           },
      })

@@ -19,7 +19,7 @@ export const ModalDownloadFile = ({ dataOpenImage, isOpen, onOpenChange }: Props
 
      return (
           <Modal isOpen={isOpen} onOpenChange={onOpenChange}
-               className={`${theme} text-foreground-500`}
+               className={`${theme} text-foreground-500 modal`}
                placement="top-center">
                <ModalContent className="p-3">
                     {(onClose) => (

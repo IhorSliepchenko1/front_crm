@@ -28,8 +28,8 @@ export const CashRegisterDeposit = ({ isOpen, onOpenChange, page, limit }: Props
           mode: "onChange",
           reValidateMode: "onBlur",
           defaultValues: {
-               cash: null,
-               cashless: null,
+               // cash: 0,
+               // cashless: 0,
                date: calendarDate(new Date(Date.now())),
           },
      })

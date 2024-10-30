@@ -5,7 +5,6 @@ import { CiLogout } from "react-icons/ci"
 import { logout, selectIsAuthenticated } from "../../../features/user/userSlice";
 import { NavButton } from "../buttons/nav-button";
 import { ToggleTheme } from "../buttons/toggle-them";
-import { useCheckValidToken } from "../../hooks/useCheckValidToken";
 
 
 export const NavBar = () => {
@@ -14,7 +13,6 @@ export const NavBar = () => {
      const dispatch = useDispatch()
      const navigate = useNavigate()
 
-     const { decoded } = useCheckValidToken()
 
      const handleLogout = () => {
           dispatch(logout())
@@ -43,7 +41,6 @@ export const NavBar = () => {
                     }
                </NavbarContent>
                <NavbarContent justify="end">
-                    <p>{decoded.login}</p>
                     <NavbarItem>
                          <NavbarContent>
                               <ToggleTheme />

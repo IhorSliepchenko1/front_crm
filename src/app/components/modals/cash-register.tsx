@@ -25,7 +25,7 @@ export const ModalCashRegisterBase = ({ isOpen, resetInput, control, handleSubmi
                isOpen={isOpen}
                onOpenChange={resetInput}
                placement="top-center"
-               className={`${theme} text-foreground-500`}
+               className={`${theme} text-foreground-500 modal`}
           >
                <ModalContent
                >
