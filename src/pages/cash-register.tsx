@@ -1,9 +1,7 @@
-// import { MdAdd } from "react-icons/md";
 import { FaCashRegister } from "react-icons/fa";
-
 import { TableCashRegister } from "../app/components/table/cash-register";
-import { useGetAllCashRegisterQuery } from "../app/services/cashRegisterApi"
-import { useState } from "react";
+import { useGetAllCashRegisterQuery, useLazyGetAllPagesCashRegisterQuery } from "../app/services/cashRegisterApi"
+import { useMemo, useState } from "react";
 import { Button } from "../app/components/buttons/button";
 import { useDisclosure } from "@nextui-org/react";
 import { CashRegisterDeposit } from "../app/components/cash-register-deposit";
@@ -17,6 +15,16 @@ export const CashRegister = () => {
      const { data, isLoading } = useGetAllCashRegisterQuery({ page, limit })
      const { isOpen, onOpen, onOpenChange } = useDisclosure();
      const { alert, classFrames, typeAlert } = useCreateContext()
+     const [triggerGetAllPagesCashRegister, { data: dataPage }] = useLazyGetAllPagesCashRegisterQuery();
+
+     const fn = async () => {
+          await triggerGetAllPagesCashRegister();
+     }
+
+     const dataDownload = useMemo(() => {
+          return dataPage ? dataPage : []
+     }, [fn])
+
 
      return (
 
@@ -30,13 +38,12 @@ export const CashRegister = () => {
                     className="button-add"
                >Внести кассу</Button>
                <Balance />
-
                {alert && typeAlert === `add` && < AlertSuccess
                     type="success"
                     message={`Касса внесена`}
                     classFrames={classFrames}
                />}
-               <TableCashRegister data={data} limit={limit} isLoading={isLoading} page={page} setPage={setPage} />
+               <TableCashRegister data={data} limit={limit} isLoading={isLoading} page={page} setPage={setPage} dataDownload={dataDownload} fn={fn} />
                <CashRegisterDeposit isOpen={isOpen} onOpenChange={onOpenChange} page={page} limit={limit} />
           </div>
      )

@@ -1,5 +1,5 @@
 import { useFormattedNumber } from "../hooks/useFormattedNumber";
-import { useGetBalanceQuery } from "../services/apiBalance";
+import { useGetBalanceQuery } from "../services/balanceApi";
 import { Card, CardBody, Divider, Chip } from "@nextui-org/react";
 
 type DataRender = {
@@ -16,7 +16,8 @@ export const Balance = () => {
      const dataRender: DataRender[] = [
           { title: `Сумма касс`, color: `primary`, data: data?.totalCash },
           { title: `Расходы`, color: `danger`, data: data?.totalExpenses },
-          { title: `Баланс`, color: `success`, data: data?.balance },
+          { title: `Наличка`, color: `success`, data: data?.cash },
+          { title: `Карта`, color: `secondary`, data: data?.cashless },
      ]
 
      return (

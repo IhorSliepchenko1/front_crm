@@ -7,11 +7,15 @@ export type User = {
      updatedAt: Date
 }
 
-export type TypesExpenses = {
+export type TypesExpensesAndPayments = {
      id: number
      name: string
      createdAt: Date
      updatedAt: Date
+}
+
+export type CashData = {
+     cash: number, cashless: number, date: string | Date, id?: number, totalCash: number
 }
 
 export type CashRegister = {
@@ -25,7 +29,13 @@ export type CashRegister = {
      updatedAt: Date
 }
 
+export type CashRegisterAll = {
+     rows: CashRegister[]
+     count: number
+}
+
 export type Expenses = {
+     paymentName: string
      id: number
      name: string
      date: Date
@@ -35,20 +45,15 @@ export type Expenses = {
      createdAt: Date
      updatedAt: Date
      typesExpenseId: number
+     paymentId: number
      userName: string
      typeName: string
 
 }
 
-// export type ExpensesData = {
-//      count: number
-//      rows: Expenses[]
-// }
 
 
-export type CashData = {
-     cash: number, cashless: number, date: string | Date, id?: number, totalCash: number
-}
+
 
 
 export type Deposit = {
@@ -64,7 +69,9 @@ export type DecodeToken = {
 }
 
 export type Balance = {
+     cash: number,
+     cashless: number,
      totalCash: number,
-     totalExpenses: number,
-     balance: number
+     totalExpenses: number
+
 }

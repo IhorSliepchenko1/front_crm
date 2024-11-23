@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useCalendarInputDate } from "../hooks/useCalendarInputDate";
 import { useGetAllTypeQuery } from "../services/typeApi";
 import { ModalExpensesBase } from "./modals/expenses";
-import { useLazyGetBalanceQuery } from "../services/apiBalance";
+import { useLazyGetBalanceQuery } from "../services/balanceApi";
 import { useExpensesDepositMutation, useLazyGetAllExpensesQuery } from "../services/expensesApi";
 import { useCreateContext } from "../../context-provider";
 
@@ -26,6 +26,7 @@ export const ExpensesDeposit = ({ isOpen, onOpenChange, page, limit }: Props) =>
      const [error, setError] = useState("")
      const [selectedFile, setSelectedFile] = useState<File | null>(null)
      const [typeId, setTypeId] = useState('0')
+     const [paymentId, setPaymentId] = useState('0')
 
      const [triggerGetAllExpenses] = useLazyGetAllExpensesQuery()
      const [expensesDeposit] = useExpensesDepositMutation()
@@ -48,7 +49,6 @@ export const ExpensesDeposit = ({ isOpen, onOpenChange, page, limit }: Props) =>
           reValidateMode: "onBlur",
           defaultValues: {
                name: '',
-               // sum: 0,
                date: calendarDate(new Date(Date.now())),
           },
      })
@@ -71,6 +71,7 @@ export const ExpensesDeposit = ({ isOpen, onOpenChange, page, limit }: Props) =>
                if (data.sum) formData.append('sum', String(data.sum));
                if (data.date) formData.append('date', String(data.date));
                if (typeId) formData.append('typesExpenseId', String(typeId));
+               if (paymentId) formData.append('paymentId', String(paymentId));
                if (selectedFile) formData.append('img', selectedFile);
 
                await expensesDeposit({ expensesBody: formData }).unwrap();
@@ -101,6 +102,7 @@ export const ExpensesDeposit = ({ isOpen, onOpenChange, page, limit }: Props) =>
                setSelectedFile={setSelectedFile}
                types={types}
                setTypeId={setTypeId}
+               setPaymentId={setPaymentId}
           />
      )
 }

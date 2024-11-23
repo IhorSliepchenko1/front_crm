@@ -4,7 +4,7 @@ import { useLazyGetAllExpensesQuery, useUpdateExpensesMutation } from "../servic
 import { hasErrorField } from "../../utils/has-error-field";
 import { ModalExpensesBase } from "./modals/expenses";
 import { useGetAllTypeQuery } from "../services/typeApi";
-import { useLazyGetBalanceQuery } from "../services/apiBalance";
+import { useLazyGetBalanceQuery } from "../services/balanceApi";
 
 type Expenses = {
      name: string;
@@ -22,13 +22,16 @@ type Props = {
      date: string
      id: number
      typeName: string
-     update: boolean
+     paymentName: string
+     updateType: boolean
+     updatePay: boolean
 }
 
-export const ExpensesUpdate = ({ name, sum, date, isOpen, onOpenChange, page, limit, id, typeName, update }: Props) => {
+export const ExpensesUpdate = ({ name, sum, date, isOpen, onOpenChange, page, limit, id, typeName, updatePay, updateType, paymentName }: Props) => {
      const [error, setError] = useState("")
      const [selectedFile, setSelectedFile] = useState<File | null>(null)
      const [typeId, setTypeId] = useState('0')
+     const [paymentId, setPaymentId] = useState('0')
 
      const [triggerGetAllExpenses] = useLazyGetAllExpensesQuery()
      const [updateExpenses] = useUpdateExpensesMutation()
@@ -86,6 +89,7 @@ export const ExpensesUpdate = ({ name, sum, date, isOpen, onOpenChange, page, li
                if (data.date) formData.append('date', String(data.date));
                if (typeId) formData.append('typesExpenseId', String(typeId));
                if (selectedFile) formData.append('img', selectedFile);
+               if (paymentId) formData.append('paymentId', String(paymentId));
 
                await updateExpenses({ expensesBody: formData, id }).unwrap();
                await triggerGetAllExpenses({ page, limit }).unwrap();
@@ -114,8 +118,10 @@ export const ExpensesUpdate = ({ name, sum, date, isOpen, onOpenChange, page, li
                setSelectedFile={setSelectedFile}
                setTypeId={setTypeId}
                types={types}
-               update={update}
+               updateType={updateType}
+               updatePay={updatePay}
                typeName={typeName}
-          />
+               paymentName={paymentName}
+               setPaymentId={setPaymentId} />
      )
 }

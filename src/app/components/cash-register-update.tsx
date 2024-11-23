@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useLazyGetAllCashRegisterQuery, useUpdateCashRegisterMutation } from "../services/cashRegisterApi";
 import { Deposit } from "../types";
 import { ModalCashRegisterBase } from "./modals/cash-register";
-import { useLazyGetBalanceQuery } from "../services/apiBalance";
+import { useLazyGetBalanceQuery } from "../services/balanceApi";
 
 type Props = {
      isOpen: boolean

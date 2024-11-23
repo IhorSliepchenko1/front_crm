@@ -1,11 +1,8 @@
-import { CashRegister, Deposit } from "../types"
+import { CashRegister, CashRegisterAll, Deposit } from "../types"
 import { api } from "./api"
 
 
-type CashRegisterAll = {
-     rows: CashRegister[]
-     count: number
-}
+
 
 export const cahsRegisterApi = api.injectEndpoints({
      endpoints: (builder) => ({
@@ -36,6 +33,12 @@ export const cahsRegisterApi = api.injectEndpoints({
                          params: { page, limit },
                     }),
           }),
+          getAllPagesCashRegister: builder.query<CashRegister[], void>({
+               query: () => ({
+                    url: "cash-register/download-all",
+                    method: "GET",
+               }),
+          }),
 
           //редактирование 
           updateCashRegister: builder.mutation<CashRegister, { data: Deposit, id: number }>({
@@ -62,6 +65,8 @@ export const {
      useGetAllCashRegisterQuery,
      useUpdateCashRegisterMutation,
      useLazyGetAllCashRegisterQuery,
+     useGetAllPagesCashRegisterQuery,
+     useLazyGetAllPagesCashRegisterQuery
 } = cahsRegisterApi
 
 export const { endpoints: {

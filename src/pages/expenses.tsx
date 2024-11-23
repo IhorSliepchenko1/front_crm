@@ -1,9 +1,8 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Button } from "../app/components/buttons/button"
-// import { MdAdd } from "react-icons/md";
 import { GiPayMoney } from "react-icons/gi";
 import { TableExpenses } from "../app/components/table/expenses";
-import { useGetAllExpensesQuery } from "../app/services/expensesApi";
+import { useGetAllExpensesQuery, useLazyGetAllPagesExpensesQuery } from "../app/services/expensesApi";
 import { ExpensesDeposit } from "../app/components/expenses-deposit";
 import { useDisclosure } from "@nextui-org/react";
 import { Balance } from "../app/components/balance";
@@ -17,6 +16,16 @@ export const Expenses = () => {
      const { isOpen, onOpen, onOpenChange } = useDisclosure();
      const { alert, classFrames } = useCreateContext()
      const { data, isLoading } = useGetAllExpensesQuery({ page, limit })
+
+     const [triggerGetAllPagesExpensesQuery, { data: dataPage }] = useLazyGetAllPagesExpensesQuery();
+
+     const fn = async () => {
+          await triggerGetAllPagesExpensesQuery();
+     }
+
+     const dataDownload = useMemo(() => {
+          return dataPage ? dataPage : []
+     }, [fn])
 
 
      return (
@@ -37,7 +46,7 @@ export const Expenses = () => {
                     message={`Расход добавлен`}
                     classFrames={classFrames}
                />}
-               <TableExpenses data={data} limit={limit} isLoading={isLoading} page={page} setPage={setPage} />
+               <TableExpenses data={data} limit={limit} isLoading={isLoading} page={page} setPage={setPage} dataDownload={dataDownload} fn={fn} />
                <ExpensesDeposit isOpen={isOpen} onOpenChange={onOpenChange} page={page} limit={limit} />
           </div>
 

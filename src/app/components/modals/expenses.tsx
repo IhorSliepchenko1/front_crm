@@ -4,11 +4,12 @@ import { useCreateContext } from "../../../context-provider";
 import { Input } from "../input";
 import { ErrorMessage } from "../error-message";
 import { Control, SubmitHandler, UseFormHandleSubmit } from "react-hook-form";
-import { TypesExpenses } from "../../types";
+import { TypesExpensesAndPayments } from "../../types";
 import { Chip } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button as Nextbutton } from "@nextui-org/react";
 import { Button } from "../buttons/button";
+import { useGetAllPaymentQuery } from "../../services/paymentsApi";
 
 
 type Expenses = {
@@ -25,11 +26,14 @@ type Props = {
      onSubmit: SubmitHandler<Expenses>
      error: string
      setSelectedFile: React.Dispatch<React.SetStateAction<File | null>>
-     types: TypesExpenses[] | []
+     types: TypesExpensesAndPayments[] | []
      setTypeId: (value: React.SetStateAction<string>) => void | undefined
+     setPaymentId: (value: React.SetStateAction<string>) => void | undefined
      handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-     update?: boolean
+     updateType?: boolean
+     updatePay?: boolean
      typeName?: string
+     paymentName?: string
 }
 
 export const ModalExpensesBase = ({
@@ -42,18 +46,32 @@ export const ModalExpensesBase = ({
      handleFileChange,
      types,
      setTypeId,
-     update = false,
+     setPaymentId,
+     updateType = false,
+     updatePay = false,
      typeName,
+     paymentName
 }: Props) => {
      const { theme } = useCreateContext()
-     const [newUpdate, setNewUpdate] = useState(update)
+     const [newUpdateType, setNewUpdateType] = useState(updateType)
+     const [newUpdatePay, setNewUpdatePay] = useState(updatePay)
 
-     const toggleUpdate = () => {
-          setNewUpdate((prev) => !prev)
+     const toggleUpdateType = () => {
+          setNewUpdateType((prev) => !prev)
+     }
+     const toggleUpdatePay = () => {
+          setNewUpdatePay((prev) => !prev)
      }
 
+     const { data } = useGetAllPaymentQuery()
+
+     const payments = useMemo(() => {
+          return data ? data : []
+     }, [data])
+
      useEffect(() => {
-          setNewUpdate(true)
+          setNewUpdateType(true)
+          setNewUpdatePay(true)
      }, [isOpen])
 
      return (
@@ -90,11 +108,11 @@ export const ModalExpensesBase = ({
 
 
                                    {
-                                        newUpdate && typeName ? <div className="flex justify-between items-center mt-2 mb-2">
+                                        newUpdateType && typeName ? <div className="flex justify-between items-center mt-2 mb-2">
                                              <Chip color="secondary">тип: {typeName}</Chip>
 
 
-                                             <Nextbutton className="cursor-pointer" color="warning" onClick={() => toggleUpdate()}>сменить тип?</Nextbutton></div> : <Select
+                                             <Nextbutton className="cursor-pointer" color="warning" onClick={() => toggleUpdateType()}>сменить тип?</Nextbutton></div> : <Select
                                                   label="Тип расходов"
                                                   className="max-w-xs"
                                                   onChange={(e) => setTypeId(e.target.value)
@@ -103,6 +121,23 @@ export const ModalExpensesBase = ({
                                              {types.map((type) => (
                                                   <SelectItem key={type.id} value={type.id}>
                                                        {type.name}
+                                                  </SelectItem>
+                                             ))}
+                                        </Select>
+                                   }
+                                   {
+                                        newUpdatePay && paymentName ? <div className="flex justify-between items-center mt-2 mb-2">
+                                             <Chip color="secondary">способ оплаты: {paymentName}</Chip>
+
+                                             <Nextbutton className="cursor-pointer" color="warning" onClick={() => toggleUpdatePay()}>сменить?</Nextbutton></div> : <Select
+                                                  label="Способ оплаты"
+                                                  className="max-w-xs"
+                                                  onChange={(e) => setPaymentId(e.target.value)
+                                                  }
+                                             >
+                                             {payments.map((payment) => (
+                                                  <SelectItem key={payment.id} value={payment.id}>
+                                                       {payment.name}
                                                   </SelectItem>
                                              ))}
                                         </Select>

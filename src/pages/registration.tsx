@@ -7,6 +7,8 @@ import { useCheckValidToken } from "../app/hooks/useCheckValidToken"
 export const Registration = () => {
 
      const { decoded } = useCheckValidToken()
+     console.log(decoded);
+     
      return (
           <div className="container-table flex flex-col">
                {decoded.role === `ADMIN` && <UserRegistration />}

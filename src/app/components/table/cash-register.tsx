@@ -1,18 +1,20 @@
 import { Table as TableNext, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Spinner, getKeyValue, useDisclosure } from "@nextui-org/react";
 import { formatToClientDate } from "../../../utils/format-to-client-date";
 import { useMemo, useState } from "react";
-import { CashData } from "../../types";
+import { CashData, CashRegister } from "../../types";
 import { MdDelete } from "react-icons/md";
 import { MdModeEditOutline } from "react-icons/md";
 import { useDeleteCashRegisterMutation, useLazyGetAllCashRegisterQuery } from "../../services/cashRegisterApi";
 import { CashRegisterUpdate } from "../cash-register-update";
 import { useCalendarInputDate } from "../../hooks/useCalendarInputDate";
 import { ModalDelete } from "../modals/delete";
-import { useLazyGetBalanceQuery } from "../../services/apiBalance";
+import { useLazyGetBalanceQuery } from "../../services/balanceApi";
 import { useCheckValidToken } from "../../hooks/useCheckValidToken";
 import { useCreateContext } from "../../../context-provider";
 import { AlertSuccess } from "../alert/alert-success";
 import { useFormattedNumber } from "../../hooks/useFormattedNumber";
+import { DownloadSelect } from "../download-select";
+import { TransferBalance } from "../transferBalance";
 
 type Props = {
      data: { rows: CashData[], count: number } | null | undefined
@@ -20,12 +22,15 @@ type Props = {
      limit: number
      page: number
      setPage: (page: number) => void
+     dataDownload: CashRegister[]
+     fn: () => void
 }
 
-export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Props) => {
+export const TableCashRegister = ({ data, limit, isLoading, page, setPage, dataDownload, fn }: Props) => {
      const [isModalOpen, setIsModalOpen] = useState(false);
      const [idCash, setIdCash] = useState(0)
      const [deleteDay, setDeleteDay] = useState(``)
+
      const { calendarDate } = useCalendarInputDate()
      const { formattedNumber } = useFormattedNumber()
 
@@ -62,7 +67,6 @@ export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Pro
           await triggerGetAllBalance().unwrap()
 
           alertStatus(`delete`)
-
      }
 
      const showModal = () => {
@@ -80,8 +84,11 @@ export const TableCashRegister = ({ data, limit, isLoading, page, setPage }: Pro
 
 
      return (
-
           <>
+               <div className="flex justify-between">
+                    <DownloadSelect page={page} data={dataDownload} fn={() => fn()} />
+                    <TransferBalance />
+               </div>
                {data?.rows.length === 0 ? <p>Список касс пуст</p>
                     : <TableNext
                          bottomContent={

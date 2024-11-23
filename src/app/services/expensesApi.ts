@@ -36,6 +36,13 @@ export const expensesApi = api.injectEndpoints({
                     }),
           }),
 
+          getAllPagesExpenses: builder.query<Expenses[], void>({
+               query: () => ({
+                    url: "expenses/download-all",
+                    method: "GET",
+               }),
+          }),
+
           //редактирование 
           updateExpenses: builder.mutation<Expenses,
                { expensesBody: FormData, id: number }>({
@@ -61,7 +68,9 @@ export const {
      useExpensesDepositMutation,
      useGetAllExpensesQuery,
      useLazyGetAllExpensesQuery,
-     useUpdateExpensesMutation
+     useUpdateExpensesMutation,
+     useGetAllPagesExpensesQuery,
+     useLazyGetAllPagesExpensesQuery
 } = expensesApi
 
 export const { endpoints: {
