@@ -1,8 +1,7 @@
+# Stage 1: Build React Application
 FROM node:20 AS build
 
 WORKDIR /usr/src/app
-
-ENV NODE_OPTIONS=--max-old-space-size=8192
 
 COPY package*.json ./
 
@@ -12,6 +11,7 @@ COPY . .
 
 RUN npm run build
 
+# Stage 2: Serve React Application with Nginx
 FROM nginx:stable-alpine
 
 COPY --from=build /usr/src/app/build /usr/share/nginx/html
