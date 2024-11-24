@@ -11,6 +11,7 @@ COPY . .
 
 RUN npm run build
 
+FROM nginx:stable-alpine
 # Stage 2: Serve React Application with Nginx
 FROM nginx:stable-alpine
 
