@@ -14,9 +14,10 @@ type Props = {
      onSubmit: (data: Deposit) => Promise<void>
      error: string
      title: string
+     hospitalStatus: boolean
 }
 
-export const ModalCashRegisterBase = ({ isOpen, resetInput, control, handleSubmit, onSubmit, error, title }: Props) => {
+export const ModalCashRegisterBase = ({ isOpen, resetInput, control, handleSubmit, onSubmit, error, title, hospitalStatus }: Props) => {
      const { theme } = useCreateContext()
 
 
@@ -47,6 +48,16 @@ export const ModalCashRegisterBase = ({ isOpen, resetInput, control, handleSubmi
                                         required="Обязательное поле"
                                         placeholder="0"
                                    />
+
+                                   {
+                                        hospitalStatus && <Input control={control}
+                                             name="hospital"
+                                             label="Больница"
+                                             type="number"
+                                             required="Обязательное поле"
+                                        />
+                                   }
+
                                    <Input control={control}
                                         name="date"
                                         label="Дата"

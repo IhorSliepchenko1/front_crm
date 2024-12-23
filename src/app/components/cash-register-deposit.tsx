@@ -29,6 +29,7 @@ export const CashRegisterDeposit = ({ isOpen, onOpenChange, page, limit }: Props
           reValidateMode: "onBlur",
           defaultValues: {
                date: calendarDate(new Date(Date.now())),
+               hospital: 0
           },
      })
 
@@ -44,6 +45,8 @@ export const CashRegisterDeposit = ({ isOpen, onOpenChange, page, limit }: Props
 
 
      const onSubmit = async (data: Deposit) => {
+          console.log(data);
+
           try {
                await cashRegisterDeposit(data).unwrap()
                await triggerGetAllCashRegisterDeposit({ page, limit }).unwrap()
@@ -66,6 +69,7 @@ export const CashRegisterDeposit = ({ isOpen, onOpenChange, page, limit }: Props
                control={control}
                handleSubmit={handleSubmit}
                onSubmit={onSubmit}
+               hospitalStatus={true}
                error={error} />
      )
 }

@@ -35,7 +35,6 @@ export const TransferBalance = () => {
      const [error, setError] = useState("");
 
      const transferBalance = async (data: Props) => {
-          console.log(12);
 
           try {
                await update(data).unwrap();

@@ -57,7 +57,7 @@ export type Expenses = {
 
 
 export type Deposit = {
-     cash: number | null, cashless: number | null, date: Date | string
+     cash: number | null, cashless: number | null, date: Date | string, hospital: number | null
 }
 
 export type DecodeToken = {

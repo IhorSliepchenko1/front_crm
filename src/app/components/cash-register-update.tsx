@@ -87,6 +87,7 @@ export const CashRegisterUpdate = ({
                handleSubmit={handleSubmit}
                onSubmit={onSubmit}
                error={error}
+               hospitalStatus={false}
           />
      )
 }
