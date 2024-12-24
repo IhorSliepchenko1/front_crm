@@ -1,21 +1,11 @@
-FROM node:20 AS build
-
-WORKDIR /usr/src/app
-
-ENV NODE_OPTIONS="--max-old-space-size=4096"
-
-COPY package*.json ./
-
-RUN npm install
-
-COPY . .
-
-RUN npm run build
-
 FROM nginx:stable-alpine
 
-COPY --from=build /usr/src/app/build /usr/share/nginx/html
+WORKDIR /usr/share/nginx/html
 
+# Копируем заранее собранные файлы (локальная папка build)
+COPY ./build ./
+
+# Настраиваем Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 8000
