@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+     font-family: "Fira Sans", sans-serif;
+}
+
+header {
+     min-width: 100%;
+     margin-inline: auto;
+}
+
+main {
+     min-height: 100vh;
+
+     &.h-screen {
+          height: auto !important;
+     }
+}
+
+td,
+th {
+     max-width: 100px !important;
+     text-align: center !important;
+}
+
+.ant-modal-footer {
+     display: flex;
+     flex-direction: row-reverse;
+     justify-content: space-between;
+     padding-top: 30px !important;
+}
+
+.cash-register-card {
+     margin-top: 8px;
+     margin-bottom: 8px;
+}
+
+.type-container {
+     max-width: 1700px;
+     margin: 0 auto;
+}
+
+.active {
+     color: hsl(145.96000000000004 79.46% 43.92%);
+}
+
+.container-table {
+     max-width: 1700px;
+     margin: 0 auto;
+}
+
+.modal {
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+}
